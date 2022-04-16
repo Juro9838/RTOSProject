@@ -1,0 +1,46 @@
+.global _start
+_start:
+	movia sp, 0x1000
+
+	#r7 = max_mag(-7,3);
+	movi r4, -7
+	movi r5, 3
+	call max_mag
+	mov r7,r2
+
+
+whoa:
+	br whoa
+
+
+
+#-------
+# int max_mag(int a, int b) - Return max mag of a and b
+max_mag:
+	subi sp, sp, 8
+	stw	ra, 4(sp)
+	stw r5, (sp)
+	#r4 contains a
+	call abs
+#	mov r6, r2
+	ldw	r4, (sp)
+	stw r2, (sp)
+#	mov r4, r5  #makes value r4 the value of r5
+	call abs
+	ldw	r6, (sp)  
+	bge r2, r6, mmDoNothing
+	mov r2, r6
+mmDoNothing:
+	ldw ra, (sp)
+	addi sp, sp, 8
+	ret
+
+#-------
+# int abs(int n) - Return absolute value
+abs:
+	bge r4, r0, doNothing
+	sub r4, r0, r4 # 0 - n
+	
+doNothing:
+	mov r4, r2
+	ret
